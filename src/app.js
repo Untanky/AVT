@@ -23,7 +23,7 @@ export default class App extends HTMLElement {
       </style>
       <div id="root">
         <h1>DJ Tool</h1>
-        <my-track></my-track>
+        <audio-track></audio-track>
       </div>
     `;
   }
