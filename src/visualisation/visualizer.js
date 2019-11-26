@@ -41,12 +41,12 @@ class Visualizer {
     /**
      * Creates a new Visualizer
      * 
-     * @param {string} id the id of the canvas used for drawing
+     * @param {HTMLElement} id the id of the canvas used for drawing
      * @param {AnalyserNode} analyser the analyser node of which the data is visualized
      * @param {object} options options of the visualizer
      */
-    constructor(id, analyser, options) {
-        this._canvas = document.querySelector(id)
+    constructor(canvas, analyser, options) {
+        this._canvas = canvas
         this._WIDTH = this._canvas.width
         this._HEIGHT = this._canvas.height
         console.log(this._WIDTH + ", " + this._HEIGHT);

@@ -5,11 +5,137 @@ import Visualizer from '../visualisation/visualizer.js'
 
 export default class Track extends HTMLElement {
 
+  shadow
+
+  lowerBandThreshold = 320;
+  higherBandThreshold = 3200;
+
+  /**
+   * audio context
+   */
+  context
+
+  /**
+   * analyser node for visualizing audio data
+   */
+  analyser
+
+  /**
+   * the low shelf filter for increasing/reducing the volume of low tones
+   */
+  lowFilter
+
+  /**
+   * the peaking filter for increasing/reducing the volume of mid tones
+   */
+  midFilter
+
+  /**
+   * the high shelf filter for increasing/reducing the volume of high tones
+   */
+  highFilter
+
+  /**
+   * the master gain node for increasing/reducing the volume of the sound
+   */
+  gainNode
+
+  /**
+   * input elements
+   */
+  fileInput
+  playButton
+  stopButton
+  volumeSlider
+  lowSlider
+  midSlider
+  highSlider
+
+  /**
+   * Visualizer for visualizing audio data
+   */
+  visualizer
+
+  /**
+    * Audio Player for playing/stopping the audio output
+    */
+  audioPlayer
+
   constructor() {
     super();
 
-    let shadow = this.attachShadow({ mode: 'open' });
-    shadow.innerHTML = this.render();
+    this.shadow = this.attachShadow({ mode: 'open' });
+    this.shadow.innerHTML = this.render();
+
+    this.context = new AudioContext();
+
+    this.setupAudioGraph();
+
+    this.fileInput = this.shadow.querySelector('#file-input');
+    this.playButton = this.shadow.querySelector('#play-button');
+    this.stopButton = this.shadow.querySelector('#stop-button');
+    this.volumeSlider = new Slider(this.shadow.querySelector('#volume-slider'), (value) => { this.gainNode.gain.value = value ** 2; }, 0.2);
+    this.lowSlider = new Slider(this.shadow.querySelector('#low-slider'), (value) => { this.low.gain.value = value; }, 0);
+    this.midSlider = new Slider(this.shadow.querySelector('#mid-slider'), (value) => { this.mid.gain.value = value; }, 0);
+    this.highSlider = new Slider(this.shadow.querySelector('#high-slider'), (value) => { this.high.gain.value = value; }, 0);
+
+    this.visualizer = new Visualizer(this.shadow.querySelector('#canvas'), this.analyser, { lowerBandThreshold: this.lowerBandThreshold, higherBandThreshold: this.higherBandThreshold })
+
+    this.audioPlayer = new AudioPlayer(this.context, this.gainNode);
+
+    this.fileInput.onchange = () => {
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        this.context.decodeAudioData(ev.target.result, function (buffer) {
+          this.audioPlayer.stop();
+          this.audioPlayer.setAudioBuffer(buffer);
+        });
+      };
+      console.log(this.fileInput.value)
+      reader.readAsArrayBuffer(this.fileInput[0]);
+    }
+
+    this.playButton.addEventListener("click", () => {
+      if (this.audioPlayer.getIsPlaying()) {
+        this.audioPlayer.pause();
+        this.playButton.value = "Play"
+      }
+      else {
+        this.audioPlayer.play();
+        this.playButton.value = "Pause"
+      }
+    });
+
+    this.stopButton.addEventListener("click", () => {
+      this.audioPlayer.stop();
+    })
+  }
+
+  setupAudioGraph() {
+    this.analyser = this.context.createAnalyser();
+    this.analyser.fftSize = 2048;
+    this.analyser.connect(this.context.destination);
+
+    this.low = this.context.createBiquadFilter();
+    this.low.type = "lowshelf";
+    this.low.frequency.value = this.lowerBandThreshold;
+    this.low.gain.value = 0.0;
+    this.low.connect(this.analyser);
+
+    this.mid = this.context.createBiquadFilter();
+    this.mid.type = "peaking";
+    this.mid.frequency.value = (this.higherBandThreshold + this.lowerBandThreshold) / 2;
+    this.mid.gain.value = 0.0;
+    this.mid.connect(this.low);
+
+    this.high = this.context.createBiquadFilter();
+    this.high.type = "highshelf";
+    this.high.frequency.value = this.higherBandThreshold;
+    this.high.gain.value = 0.0;
+    this.high.connect(this.mid);
+
+    this.gainNode = this.context.createGain();
+    this.gainNode.connect(this.high);
   }
 
   render() {
@@ -78,126 +204,15 @@ export default class Track extends HTMLElement {
       </div>
     `
   }
+
+
+  /**
+   * Draw the visualization
+   */
+  draw() {
+    // acutal visualization
+    visualizer.draw();
+  }
 }
 
 customElements.define('my-track', Track);
-// /*
-//     INSERT YOUR CODE HERE
-//  */
-// const lowerBandThreshold = 320;
-// const higherBandThreshold = 3200;
-
-
-// /**
-//  * audio context
-//  */
-// const context = new AudioContext();
-
-// /**
-//  * analyser node for visualizing audio data
-//  */
-// const analyser = context.createAnalyser();
-// analyser.fftSize = 2048;
-// analyser.connect(context.destination);
-
-// /**
-//  * the low shelf filter for increasing/reducing the volume of low tones
-//  */
-// const low = context.createBiquadFilter();
-// low.type = "lowshelf";
-// low.frequency.value = lowerBandThreshold;
-// low.gain.value = 0.0;
-// low.connect(analyser);
-
-// /**
-//  * the peaking filter for increasing/reducing the volume of mid tones
-//  */
-// const mid = context.createBiquadFilter();
-// mid.type = "peaking";
-// mid.frequency.value = (higherBandThreshold + lowerBandThreshold) / 2;
-// mid.gain.value = 0.0;
-// mid.connect(low);
-
-// /**
-//  * the high shelf filter for increasing/reducing the volume of high tones
-//  */
-// const high = context.createBiquadFilter();
-// high.type = "highshelf";
-// high.frequency.value = higherBandThreshold;
-// high.gain.value = 0.0;
-// high.connect(mid);
-
-// /**
-//  * the master gain node for increasing/reducing the volume of the sound
-//  */
-// const gainNode = context.createGain();
-// gainNode.connect(high);
-
-// /**
-//  * input elements
-//  */
-// const fileInput = document.querySelector('#file-input');
-// const playButton = document.querySelector('#play-button');
-// const stopButton = document.querySelector('#stop-button');
-// const volumeSlider = new Slider('#volume-slider', (value) => { gainNode.gain.value = value ** 2; }, 0.2);
-// const lowSlider = new Slider('#low-slider', (value) => { low.gain.value = value; }, 0);
-// const midSlider = new Slider('#mid-slider', (value) => { mid.gain.value = value; }, 0);
-// const highSlider = new Slider('#high-slider', (value) => { high.gain.value = value; }, 0);
-
-// /**
-//  * Visualizer for visualizing audio data
-//  */
-// const visualizer = new Visualizer('#canvas', analyser, { lowerBandThreshold: lowerBandThreshold, higherBandThreshold: higherBandThreshold })
-
-// /**
-//  * Audio Player for playing/stopping the audio output
-//  */
-// const audioPlayer = new AudioPlayer(context, gainNode);
-
-// /**
-//  * Read audio source
-//  */
-// fileInput.addEventListener("change", function() {
-// 	var reader = new FileReader();
-// 	reader.onload = function(ev) {
-// 		context.decodeAudioData(ev.target.result, function(buffer) {
-//       audioPlayer.stop();
-//       audioPlayer.setAudioBuffer(buffer);
-// 		});
-// 	};
-//   reader.readAsArrayBuffer(this.files[0]);
-// }, false);
-
-// /**
-//  * Play/pause sound
-//  */
-// playButton.addEventListener("click", () => {
-//   if(audioPlayer.getIsPlaying()) {
-//     audioPlayer.pause();
-//     playButton.value = "Play"
-//   }
-//   else {
-//     audioPlayer.play();
-//     playButton.value = "Pause"
-//   }
-// });
-
-// /**
-//  * Stop sound
-//  */
-// stopButton.addEventListener("click", () => {
-//   audioPlayer.stop();
-// })
-
-// /**
-//  * Draw the visualization
-//  */
-// function draw() {
-//   // to refresh the frame
-//   var drawVisual = requestAnimationFrame(draw);
-
-//   // acutal visualization
-//   visualizer.draw();
-// }
-
-// draw();
