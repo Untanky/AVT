@@ -1,38 +1,32 @@
 export default class TrackAudioNode extends AudioNode, HTMLElement {
 
-
+  connectedNode = null
+  lastNode
 
   constructor() {
     super();
 
     this.setupAudioGraph
+    // TODO: set last node of audio graph
+    // lastNode = ...
   }
 
   setupAudioGraph() {
-    this.analyser = this.context.createAnalyser();
-    this.analyser.fftSize = 2048;
-    this.analyser.connect(this.context.destination);
+    // TODO: sets up the audio graph
+  }
 
-    this.low = this.context.createBiquadFilter();
-    this.low.type = "lowshelf";
-    this.low.frequency.value = this.lowerBandThreshold;
-    this.low.gain.value = 0.0;
-    this.low.connect(this.analyser);
+  connect(audioNode) {
+    this.lastNode.connect(audioNode);
+    this.isConnected = true;
+  }
 
-    this.mid = this.context.createBiquadFilter();
-    this.mid.type = "peaking";
-    this.mid.frequency.value = (this.higherBandThreshold + this.lowerBandThreshold) / 2;
-    this.mid.gain.value = 0.0;
-    this.mid.connect(this.low);
+  disconnect() {
+    this.lastNode.disconnect();
+    this.isConnected = false;
+  }
 
-    this.high = this.context.createBiquadFilter();
-    this.high.type = "highshelf";
-    this.high.frequency.value = this.higherBandThreshold;
-    this.high.gain.value = 0.0;
-    this.high.connect(this.mid);
-
-    this.gainNode = this.context.createGain();
-    this.gainNode.connect(this.high);
+  idConnected() {
+    return this.connectedNode === null;
   }
 
   render

@@ -1,12 +1,12 @@
 {
-  "name": "avt-uebungsaufgabe-2",
+  "name": "avt-beleg",
   "version": "0.1.0",
   "description": "",
   "scripts": {
     "start": "live-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Lukas Grimm, Jennifer Borowski, Felix Schröder",
   "license": "ISC",
   "dependencies": {
     "live-server": "^1.2.1"
