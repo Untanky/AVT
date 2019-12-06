@@ -20,3 +20,5 @@ class MidiMapping {
     this.map[btnId]
   }
 }
+
+export default MidiMapping;

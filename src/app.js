@@ -1,4 +1,4 @@
-import Track from './dj/track.js';
+import Track from './dj/audioTrack.js';
 
 export default class App extends HTMLElement {
 
@@ -23,6 +23,7 @@ export default class App extends HTMLElement {
       </style>
       <div id="root">
         <h1>DJ Tool</h1>
+        <audio-track></audio-track>
         <audio-track></audio-track>
       </div>
     `;
