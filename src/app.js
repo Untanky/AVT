@@ -24,10 +24,7 @@ export default class App extends HTMLElement {
       <div id="root">
         <h1>DJ Tool</h1>
         <audio-track></audio-track>
-<<<<<<< HEAD
         <audio-track></audio-track>
-=======
->>>>>>> 61b4d31e80276a31f99ac8d912eb3f24646d3b90
       </div>
     `;
   }
