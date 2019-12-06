@@ -88,7 +88,7 @@ export default class SourceSelectionElement extends HTMLElement {
             <option>sine</option>
             <option>square</option>
             <option>sawtooth</option>
-            <option>sriangle</option>
+            <option>triangle</option>
             <option>File</option>
           </select>
         </span>

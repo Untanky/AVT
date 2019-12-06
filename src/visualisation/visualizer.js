@@ -1,4 +1,7 @@
-const MAX_FREQ = 22050
+import {audioCtx} from '../globals/audioContext.js'
+import looper from '../globals/looper.js'
+
+const MAXFREQ = 22050
 
 /**
  * An audio visualizer
@@ -6,97 +9,97 @@ const MAX_FREQ = 22050
 class Visualizer {
 
     /**
-     * canvase
+     * canvas
      */
-    _canvas
+    canvas
     /**
      * canvas context, for drawing
      */
-    _canvasCtx
+    canvasCtx
     /**
      * analyser of which the analytical data of the sound comes from
      */
-    _analyser
+    analyser
     /**
      * length of the analyser output
      */
-    _bufferLength
+    bufferLength
     /**
      * array for the analyser output
      */
-    _dataArray
+    dataArray
     /**
      * width of the canvas
      */
-    _WIDTH
+    width
     /**
      * height of the canvas
      */
-    _HEIGHT
+    height
     /**
      * options for the visualizer
      */
-    _options
+    options
 
     /**
      * Creates a new Visualizer
      * 
      * @param {HTMLElement} id the id of the canvas used for drawing
-     * @param {AnalyserNode} analyser the analyser node of which the data is visualized
-     * @param {object} options options of the visualizer
      */
-    constructor(canvas, analyser, options) {
-        this._canvas = canvas
-        this._WIDTH = this._canvas.width
-        this._HEIGHT = this._canvas.height
-        console.log(this._WIDTH + ", " + this._HEIGHT);
-        this._canvasCtx = this._canvas.getContext('2d')
-        this._analyser = analyser;
-        this._bufferLength = analyser.frequencyBinCount
-        this._dataArray = new Uint8Array(this._bufferLength)
-        this._options = options;
+    constructor(canvas) {
+        this.canvas = canvas
+        this.width = this.canvas.width
+        this.height = this.canvas.height
+        this.canvasCtx = this.canvas.getContext('2d')
+        this.analyser = audioCtx.createAnalyser();
+        this.bufferLength = this.analyser.frequencyBinCount
+        this.dataArray = new Uint8Array(this.bufferLength)
+        this.visualizers = {bars: this.barVisualizer}
+        this.type = "bars"
+        looper.addLoopedMethod(this.draw, this);
+    }
+
+    setVisualizer(type) {
+        this.type = type;
+    }
+
+    barVisualizer(context) {
+
+        var barWidth = (context.width / context.dataArray.length);
+        var barHeight;
+
+        var x = 0; 
+        for (var i = 0; i < context.dataArray.length; i++) {
+            barHeight = context.dataArray[i];
+            if(i === 0)
+                context.canvasCtx.fillStyle = 'rgb(255,0,0)';
+            if(i === 1)
+                context.canvasCtx.fillStyle = 'rgb(0,255,0)';
+            if(i === 2)
+                context.canvasCtx.fillStyle = 'rgb(0,0,255)';
+            context.canvasCtx.fillRect(x, context.height - barHeight, barWidth, barHeight);
+
+            x += barWidth + 1;
+        }
     }
 
     /**
      * Draws the visualization
      */
-    draw() {
+    draw(context) {
 
-        this._analyser.getByteFrequencyData(this._dataArray);
+        context.analyser.getByteFrequencyData(context.dataArray);
 
-        var buckets = [0, 0, 0];
+        context.canvasCtx.fillStyle = 'rgb(245, 245, 245)';
+        context.canvasCtx.fillRect(0, 0, context.width, context.height);
 
-        const STEP = MAX_FREQ / this._analyser.fftSize;
-
-        // find the highest value in the frequency bands
-        for (var i = 0; i < this._dataArray.length; i++) {
-            let index = 0;
-            if(i * STEP > this._options.lowerBandThreshold)
-                index++;
-            if(i * STEP > this._options.higherBandThreshold)
-                index++;
-
-            buckets[index] = Math.max(this._dataArray[i], buckets[index]);
-        }
-
-        this._canvasCtx.fillStyle = 'rgb(245, 245, 245)';
-        this._canvasCtx.fillRect(0, 0, this._WIDTH, this._HEIGHT);
-        var barWidth = (this._WIDTH / 3);
-        var barHeight;
-
-        var x = 0; for (var i = 0; i < buckets.length; i++) {
-            barHeight = buckets[i];
-            if(i === 0)
-                this._canvasCtx.fillStyle = 'rgb(255,0,0)';
-            if(i === 1)
-                this._canvasCtx.fillStyle = 'rgb(0,255,0)';
-            if(i === 2)
-                this._canvasCtx.fillStyle = 'rgb(0,0,255)';
-            this._canvasCtx.fillRect(x, this._HEIGHT - barHeight, barWidth, barHeight);
-
-            x += barWidth + 1;
-        }
+        context.visualizers[context.type](context);
     };
+
+    getAnalyserNode() {
+
+        return this.analyser;
+    }
 }
 
 export default Visualizer;
