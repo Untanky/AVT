@@ -1,5 +1,3 @@
-import Track from './dj/audioTrack.js';
-
 export default class App extends HTMLElement {
 
   constructor() {
