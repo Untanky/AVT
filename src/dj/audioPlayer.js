@@ -86,7 +86,7 @@ export default class AudioPlayerElement extends AudioElement {
 
   getFirstNode() {
 
-    return this.audioPlayer.sourceNode;
+    return undefined;
   }
 
   getLastNode() {

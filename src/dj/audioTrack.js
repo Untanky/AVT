@@ -3,8 +3,10 @@ import AudioPlayerElement from './audioPlayer.js'
 import SourceSelectionElement from './sourceSelection.js'
 import SourceSelection from './sourceSelection.js';
 import { audioCtx } from '../globals/audioContext.js';
+import EqualizerElement from './equalizer.js';
+import AudioElement from '../audioElement.js';
 
-export default class AudioTrack extends HTMLElement {
+export default class AudioTrack extends AudioElement {
 
   constructor() {
     super();
@@ -19,7 +21,6 @@ export default class AudioTrack extends HTMLElement {
     
     // create custom visualizer element
     this.visualizerElement = new VisualizerElement();
-    this.visualizerElement.connect(audioCtx.destination);
     
     audioTrackContainer.appendChild(this.visualizerElement)
 
@@ -31,13 +32,20 @@ export default class AudioTrack extends HTMLElement {
     // create custom audio player element
     this.audioPlayer = new AudioPlayerElement();
     this.audioPlayer.setSourceFactory(this.sourceSelection.getSourceFactory());
-    this.audioPlayer.connect(this.visualizerElement);
 
     audioTrackContainer.appendChild(this.audioPlayer);
+
+    this.equalizer = new EqualizerElement();
+    
+    audioTrackContainer.appendChild(this.equalizer);
 
     // setup shadow tree
     this.shadowRoot.appendChild(styleElement)
     this.shadowRoot.appendChild(audioTrackContainer);
+
+    // setup audio graph
+    this.audioPlayer.connect(this.equalizer);
+    this.equalizer.connect(this.visualizerElement);
   }
 
   createStyle() {
@@ -67,6 +75,16 @@ export default class AudioTrack extends HTMLElement {
     container.appendChild(trackTitle);
 
     return container;
+  }
+
+  getFirstNode() {
+
+    return undefined;
+  }
+
+  getLastNode() {
+
+    return this.visualizerElement;
   }
 }
 
