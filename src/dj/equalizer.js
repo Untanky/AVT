@@ -39,10 +39,6 @@ export default class EqualizerElement extends AudioElement {
 
     let style = document.createElement('style');
     style.textContent = `
-      .container {
-        transform: rotate(90deg)
-      }
-      
       input[type="range"] {
         display: block;
       }
