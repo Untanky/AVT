@@ -1,3 +1,5 @@
+import AudioTrack from './dj/audioTrack.js'
+
 export default class App extends HTMLElement {
 
   constructor() {
@@ -21,8 +23,8 @@ export default class App extends HTMLElement {
       </style>
       <div id="root">
         <h1>DJ Tool</h1>
-        <audio-track></audio-track>
-        <audio-track></audio-track>
+        <audio-track number=1></audio-track>
+        <audio-track number=2></audio-track>
       </div>
     `;
   }
