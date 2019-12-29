@@ -37,9 +37,10 @@ export default class AudioPlayerElement extends AudioElement {
 
     this.volumeSlider = document.createElement('input');
     this.volumeSlider.setAttribute('type', 'range');
-    this.volumeSlider.setAttribute('min-value', 0);
-    this.volumeSlider.setAttribute('max-value', 100);
-    this.volumeSlider.setAttribute('value', 50);
+    this.volumeSlider.setAttribute('min', 0);
+    this.volumeSlider.setAttribute('max', 1);
+    this.volumeSlider.setAttribute('step', 0.01);
+    this.volumeSlider.setAttribute('value', 0.5);
     this.volumeSlider.addEventListener('input', () => this.onVolumeChanged(this.volumeSlider.value))
 
     container.appendChild(this.volumeSlider);
@@ -63,13 +64,13 @@ export default class AudioPlayerElement extends AudioElement {
 
   onPlayButtonClicked() {
 
-    if(this.audioPlayer.getIsPlaying()) {
+    if(!this.audioPlayer.getIsPlaying()) {
       this.audioPlayer.play();
-      this.playButton.textContent = "Play";
+      this.playButton.textContent = "Pause";
     }
     else {
       this.audioPlayer.pause();
-      this.playButton.textContent = "Pause";
+      this.playButton.textContent = "Play";
     }
   }
 
@@ -114,14 +115,16 @@ class AudioPlayer {
   constructor() {
 
     this.gainNode = audioCtx.createGain();
-    this.gainNode.gain.value = 50;
+    this.gainNode.gain.value = 0.5;
+    this.startedAt = 0
+    this.pausedAt = 0
   }
 
   play() {
     let offset = this.pausedAt;
 
     this.sourceNode = this.sourceFactory.create();
-    this.sourceNode.connect(gainNode);
+    this.sourceNode.connect(this.gainNode);
     this.sourceNode.start(0, offset);
 
     this.startedAt = audioCtx.currentTime - offset;

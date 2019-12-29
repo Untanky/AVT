@@ -1,5 +1,8 @@
 import VisualizerElement from '../visualisation/visualizerElement.js'
-import AudioPlayerElement from './audioPlayerElement.js'
+import AudioPlayerElement from './audioPlayer.js'
+import SourceSelectionElement from './sourceSelection.js'
+import SourceSelection from './sourceSelection.js';
+import { audioCtx } from '../globals/audioContext.js';
 
 export default class AudioTrack extends HTMLElement {
 
@@ -19,8 +22,15 @@ export default class AudioTrack extends HTMLElement {
     
     audioTrackContainer.appendChild(this.visualizerElement)
 
+    // create custom source selection 
+    this.sourceSelection = new SourceSelection();
+
+    audioTrackContainer.appendChild(this.sourceSelection);
+
     // create custom audio player element
     this.audioPlayer = new AudioPlayerElement();
+    this.audioPlayer.setSourceFactory(this.sourceSelection.getSourceFactory());
+    this.audioPlayer.connect(audioCtx.destination);
 
     audioTrackContainer.appendChild(this.audioPlayer);
 
