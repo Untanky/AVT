@@ -13,11 +13,14 @@ export default class AudioTrack extends HTMLElement {
     let shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = this.render();
 
+    // get the child elements
+    this.sourceNameDisplay = this.shadowRoot.querySelector('.song-display')
     this.visualizerElement = this.shadowRoot.querySelector('visualizer-element');
     this.sourceSelectionElement = this.shadowRoot.querySelector('source-selection');
     this.audioPlayerElement = this.shadowRoot.querySelector('audio-player');
     this.trackFilterElement = this.shadowRoot.querySelector('track-filter');
 
+    // get the audio nodes
     this.visualizer = this.visualizerElement.getVisualizer();
     this.sourceSelection = this.sourceSelectionElement.getSourceSelection();
     this.audioPlayer = this.audioPlayerElement.getAudioPlayer();
@@ -33,8 +36,25 @@ export default class AudioTrack extends HTMLElement {
 
   render() {
     return `
-      <div>
-        <h2>Track</h2>
+      <style>
+        .track-container {
+          padding: 2em;
+          border-radius: 1em;
+          margin: 1em 0;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .track-container > h1 {
+          text-align: left;
+        }
+
+        .track-container > h3 {
+          text-align: left
+        }
+      </style>
+      <div class="track-container">
+        <h1>Track</h1>
+        <h3>Currently playing: <span class="song-display"></span></h3>
         <visualizer-element></visualizer-element>
         <source-selection></source-selection>
         <audio-player></audio-player>

@@ -27,8 +27,12 @@ export default class SourceSelection {
 
   setSourceAsFile() {
 
-    if (this.sourceNode !== null)
+    try {
       this.sourceNode.stop();
+    }
+    catch(error) {
+      console.log(error)
+    }
 
     this.type = "buffer"
     this.sourceNode = audioCtx.createBufferSource();
