@@ -1,7 +1,102 @@
 import {audioCtx} from '../globals/audioContext.js'
 import looper from '../globals/looper.js'
+import AudioElement from '../audioElement.js';
 
 const MAXFREQ = 22050
+
+const visualisations = [ 'bar', 'line' ];
+
+export default class VisualizerElement extends AudioElement {
+
+  constructor() {
+
+    super()
+
+    this.shadow = this.attachShadow({ mode: 'open' });
+
+    let style = this.createStyle();
+
+    let container = document.createElement('div');
+    container.setAttribute('class', 'visualizer-container');
+
+    let canvasContainer = document.createElement('div');
+    container.setAttribute('class', 'canvas-container');
+
+    container.appendChild(canvasContainer);
+
+    let typeSelectorContainer = document.createElement('div');
+    container.setAttribute('class', 'type-selector-container');
+
+    container.appendChild(typeSelectorContainer);
+
+    this.canvas = document.createElement('canvas');
+    this.canvas.setAttribute('class', 'visualization-canvas')
+
+    canvasContainer.appendChild(this.canvas);
+
+    this.typeSelectorLabel = document.createElement('label');
+    this.typeSelectorLabel.setAttribute('for', 'type-selector');
+    this.typeSelectorLabel.textContent = "Select visualization: ";
+
+    typeSelectorContainer.appendChild(this.typeSelectorLabel);
+
+    this.typeSelector = document.createElement('select');
+    this.typeSelector.setAttribute('id', 'type-selector');
+    this.typeSelector.addEventListener('change', () => this.onTypeSelectorChange(this.typeSelector.value))
+
+    typeSelectorContainer.appendChild(this.typeSelector);
+
+    for(let visualisation of visualisations) {
+        let option = document.createElement('option');
+        option.textContent = visualisation;
+        this.typeSelector.appendChild(option);
+    }
+
+    this.shadow.appendChild(style);
+    this.shadow.appendChild(container)
+
+    this.visualizer = new Visualizer(this.canvas);
+  }
+
+  onTypeSelectorChange(value) {
+
+    this.visualizer.setVisualizer(value);
+  }
+
+  createStyle() {
+
+    let style = document.createElement('style');
+    style.textContent = `
+      .visualizer-container {
+        width: 100%;
+        max-width: 620px;
+        margin: 0 auto;
+      }
+
+      .visualizer-container > .canvas-container > .visualization-canvas {
+        width: 100%;
+        border: 1px solid rgb(225, 225, 225);
+        border-radius: 24px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+      }
+    `
+    return style;
+  }
+
+  getFirstNode() {
+    return this.visualizer.getAnalyserNode();
+  }
+
+  getLastNode() {
+    return this.visualizer.getAnalyserNode();
+  }
+
+  getVisualizer() {
+    return this.visualizer;
+  }
+}
+
+customElements.define('visualizer-element', VisualizerElement);
 
 /**
  * An audio visualizer
@@ -101,5 +196,3 @@ class Visualizer {
         return this.analyser;
     }
 }
-
-export default Visualizer;

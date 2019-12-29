@@ -1,4 +1,4 @@
-export default class AudioElements extends HTMLElement {
+export default class AudioElement extends HTMLElement {
 
   constructor() {
 
@@ -7,7 +7,7 @@ export default class AudioElements extends HTMLElement {
 
   connect(node) {
     
-    if(node instanceof AudioElements)
+    if(node instanceof AudioElement)
       this.getLastNode().connect(node.getFirstNode());
     else if(node instanceof AudioNode)
       this.getLastNode().connect(node);
