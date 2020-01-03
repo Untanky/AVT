@@ -18,16 +18,26 @@ export default class EqualizerElement extends AudioElement {
 
     let style = this.createStyle();
 
-    let container = createElement('div', {class: 'container'}, '', this.shadow)
+    let container = createElement('div', {class: 'container'}, this.shadow)
 
     for(let i = 0; i <= equalizerBandThresholds.length; i++) {
-      createElement('label', {for: 'slider-' + i}, equalizerBandThresholds[i] + "Hz:", container);
+      let labelText = this.generateHertzLabelContent(i) +  " Hz:"
+      createElement('label', {for: 'slider-' + i}, container, labelText);
 
-      let slider = createElement('input', { type: 'range', min: -40, max: 40, step: 0.8, value: 0, id: 'slider-' + i}, '', container);
+      let slider = createElement('input', { type: 'range', min: -40, max: 40, step: 0.8, value: 0, id: 'slider-' + i}, container);
       slider.addEventListener('input', () => this.onSliderChanged(i, slider.value))
     }
 
     this.shadow.appendChild(style);
+  }
+
+  generateHertzLabelContent(i) {
+    if(i === 0)
+      return equalizerBandThresholds[i];
+    else if(i === equalizerBandThresholds.length) 
+      return equalizerBandThresholds[i - 1]
+    else 
+      return equalizerBandThresholds[i - 1] + " - " + equalizerBandThresholds[i];
   }
 
   createStyle() {

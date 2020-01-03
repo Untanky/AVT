@@ -23,22 +23,22 @@ export default class SourceSelection extends HTMLElement {
 
     let styleElement = this.createStyle();
 
-    this.selectionContainer = createElement('div', {class: 'selection-container'}, '', this.shadow);
+    this.selectionContainer = createElement('div', {class: 'selection-container'}, this.shadow);
 
-    this.selectionLabel = createElement('label', {for: 'source-selection'}, 'Select source: ', this.selectionContainer);
+    this.selectionLabel = createElement('label', {for: 'source-selection'}, this.selectionContainer, 'Select source: ');
 
-    this.selection = createElement('select', {id: 'source-selection'}, '', this.selectionContainer);
+    this.selection = createElement('select', {id: 'source-selection'}, this.selectionContainer);
     this.selection.addEventListener('change', () => this.onSelectionChanged(this.selection.value));
 
     for(let key in sources) {
-      createElement('option', {}, key, this.selection);
+      createElement('option', {}, this.selection, key);
     }
 
-    this.fileContainer = createElement('div', {class: 'file-container'}, '', this.shadow);
+    this.fileContainer = createElement('div', {class: 'file-container'}, this.shadow);
 
-    this.fileLabel = createElement('label', {for: 'file-input'}, 'Select an audio file: ', this.fileContainer);
+    this.fileLabel = createElement('label', {for: 'file-input'}, this.fileContainer, 'Select an audio file: ');
 
-    this.fileInput = createElement('input', {type: 'file', id: 'file-input'}, '', this.fileContainer);
+    this.fileInput = createElement('input', {type: 'file', id: 'file-input'}, this.fileContainer);
     this.fileInput.addEventListener('input', () => this.onFileChanged());
 
     this.shadow.appendChild(styleElement);

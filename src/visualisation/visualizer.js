@@ -17,21 +17,21 @@ export default class VisualizerElement extends AudioElement {
 
     let style = this.createStyle();
 
-    const container = createElement('div', {class: 'visualizer-container'}, '', this.shadow);
+    const container = createElement('div', {class: 'visualizer-container'}, this.shadow);
 
-    const canvasContainer = createElement('div', {class: 'canvas-container'}, '', container);
+    const canvasContainer = createElement('div', {class: 'canvas-container'}, container);
 
-    const typeSelectorContainer = createElement('div', {class: 'type-selector-container'}, '', container);
+    const typeSelectorContainer = createElement('div', {class: 'type-selector-container'}, container);
 
-    this.canvas = createElement('canvas', {class: 'visualization-canvas'}, '', canvasContainer);
+    this.canvas = createElement('canvas', {class: 'visualization-canvas'}, canvasContainer);
 
-    this.typeSelectorLabel = createElement('label', {for: 'type-selector'}, 'Select visualization: ', typeSelectorContainer);
+    this.typeSelectorLabel = createElement('label', {for: 'type-selector'}, typeSelectorContainer, 'Select visualization: ');
 
-    this.typeSelector = createElement('select', {id: 'type-selector'}, '', typeSelectorContainer)
+    this.typeSelector = createElement('select', {id: 'type-selector'}, typeSelectorContainer)
     this.typeSelector.addEventListener('change', () => this.onTypeSelectorChange(this.typeSelector.value))
 
     for(let visualisation of visualisations) {
-      createElement('option', {}, visualisation, this.typeSelector);
+      createElement('option', {}, this.typeSelector, visualisation);
     }
 
     this.shadow.appendChild(style);

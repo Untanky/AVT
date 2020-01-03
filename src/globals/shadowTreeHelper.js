@@ -1,4 +1,4 @@
-export const createElement = (type, attributes, textContent, root) => {
+export const createElement = (type, attributes, root, textContent = '') => {
 
   const element = document.createElement(type);
   
@@ -10,4 +10,8 @@ export const createElement = (type, attributes, textContent, root) => {
   root.appendChild(element);
   
   return element;
+}
+
+export const createStyle = () => {
+
 }
