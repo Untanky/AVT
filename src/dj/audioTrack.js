@@ -53,7 +53,7 @@ export default class AudioTrack extends AudioElement {
     let styleElement = document.createElement('style');
     styleElement.textContent = `
       .audio-track-container {
-        max-width: 800px;
+        max-width: 620px;
         background-color: white;
         margin: 2em auto;
         border-radius: 24px;

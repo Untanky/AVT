@@ -12,6 +12,10 @@ export const createElement = (type, attributes, root, textContent = '') => {
   return element;
 }
 
-export const createStyle = () => {
+export const createStyle = (content, root) => {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = content;
 
+  root.appendChild(styleElement);
+  return styleElement;
 }

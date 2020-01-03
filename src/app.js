@@ -1,5 +1,7 @@
 import AudioTrack from './dj/audioTrack.js'
 import { audioCtx } from './globals/audioContext.js';
+import { createElement, createStyle } from './globals/shadowTreeHelper.js';
+import { getInputStyle } from './globals/inputStyles.js';
 
 export default class App extends HTMLElement {
 
@@ -9,6 +11,7 @@ export default class App extends HTMLElement {
     this.shadow = this.attachShadow({ mode: 'open' });
     
     let styleElement = this.createStyle();
+    createStyle(getInputStyle(), this.shadow);
 
     let rootContainer = document.createElement('div');
     rootContainer.setAttribute('id', 'root-container');
@@ -17,26 +20,18 @@ export default class App extends HTMLElement {
     title.textContent = "DJ Tool";
     rootContainer.appendChild(title)
 
-    let crossfaderLabel = document.createElement('label');
-    crossfaderLabel.setAttribute('for', 'crossfader');
-    crossfaderLabel.textContent = "Crossfader";
-    rootContainer.appendChild(crossfaderLabel);
+    const crossfaderLabel = createElement('label', {for: 'crossfader'}, rootContainer, "Crossfader: ");
 
-    this.crossfader = document.createElement('input');
-    this.crossfader.setAttribute('type', 'range');
-    this.crossfader.setAttribute('id', 'crossfader');
-    this.crossfader.setAttribute('min', 0);
-    this.crossfader.setAttribute('max', 1);
-    this.crossfader.setAttribute('step', 0.01);
-    this.crossfader.setAttribute('value', 0.5);
-    this.crossfader.addEventListener('input', () => this.onCrossfaderChanged(this.crossfader.value))
-    rootContainer.appendChild(this.crossfader);
+    this.crossfader = createElement('input', {type: 'range', id: 'crossfader', min: 0, max: 1, step: 0.01, value: 0.5}, rootContainer);
+    this.crossfader.addEventListener('input', () => this.onCrossfaderChanged(this.crossfader.value));
+
+    const trackContainer = createElement('div', {class: 'track-container'}, rootContainer);
 
     this.track1 = new AudioTrack();
-    rootContainer.appendChild(this.track1);
+    trackContainer.appendChild(this.track1);
 
     this.track2 = new AudioTrack();
-    rootContainer.appendChild(this.track2);
+    trackContainer.appendChild(this.track2);
 
     this.shadow.appendChild(styleElement);
     this.shadow.appendChild(rootContainer);
@@ -56,12 +51,31 @@ export default class App extends HTMLElement {
     let style = document.createElement('style');
     style.textContent = `
       #root-container {
-        width: 1000px;
+        width: 1500px;
         margin: 0 auto;
       }
 
       #root-container h1 {
         text-align: center;
+      }
+
+      #root-container h1 {
+        text-align: center;
+      }
+
+      #crossfader {
+        display: block;
+      }
+
+      .track-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-content: space-evenly;
+      }
+
+      audio-track {
+        height: 100%;
+        display: inline-block;
       }
     `;
     return style;

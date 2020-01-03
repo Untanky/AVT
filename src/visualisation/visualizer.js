@@ -1,11 +1,35 @@
 import {audioCtx} from '../globals/audioContext.js'
 import looper from '../globals/looper.js'
 import AudioElement from '../audioElement.js';
-import { createElement } from '../globals/shadowTreeHelper.js';
+import { createElement, createStyle } from '../globals/shadowTreeHelper.js';
+import { getInputStyle } from '../globals/inputStyles.js';
 
 const MAXFREQ = 22050
 
 const visualisations = [ 'bar', 'line' ];
+
+function getStyle() {
+  
+  return `
+    .visualizer-container {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .visualizer-container > .type-selector-container {
+      padding: 0.5em 1em;
+    }
+
+    .visualizer-container > .canvas-container > .visualization-canvas {
+      width: 100%;
+      border: 1px solid rgb(225, 225, 225);
+      border-radius: 24px;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    }
+  `
+}
 
 export default class VisualizerElement extends AudioElement {
 
@@ -15,7 +39,8 @@ export default class VisualizerElement extends AudioElement {
 
     this.shadow = this.attachShadow({ mode: 'open' });
 
-    let style = this.createStyle();
+    createStyle(getStyle(), this.shadow);
+    createStyle(getInputStyle(), this.shadow);
 
     const container = createElement('div', {class: 'visualizer-container'}, this.shadow);
 
@@ -34,34 +59,12 @@ export default class VisualizerElement extends AudioElement {
       createElement('option', {}, this.typeSelector, visualisation);
     }
 
-    this.shadow.appendChild(style);
-
     this.visualizer = new Visualizer(this.canvas);
   }
 
   onTypeSelectorChange(value) {
 
     this.visualizer.setVisualizer(value);
-  }
-
-  createStyle() {
-
-    let style = document.createElement('style');
-    style.textContent = `
-      .visualizer-container {
-        width: 100%;
-        max-width: 620px;
-        margin: 0 auto;
-      }
-
-      .visualizer-container > .canvas-container > .visualization-canvas {
-        width: 100%;
-        border: 1px solid rgb(225, 225, 225);
-        border-radius: 24px;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-      }
-    `
-    return style;
   }
 
   getFirstNode() {

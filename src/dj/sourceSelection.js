@@ -1,5 +1,6 @@
 import {audioCtx} from '../globals/audioContext.js'
-import { createElement } from '../globals/shadowTreeHelper.js';
+import { createElement, createStyle } from '../globals/shadowTreeHelper.js';
+import { getInputStyle } from '../globals/inputStyles.js';
 
 const sources = {
   sine: 'sine',
@@ -7,6 +8,19 @@ const sources = {
   sawtooth: 'sawtooth',
   square: 'square',
   file: 'File'
+}
+
+function getStyle() {
+  return `
+    .selection-container {
+      padding: 0.5em 1em;
+    }
+
+    .file-container {
+      display: none;
+      padding: 0.5em 1em;
+    }
+  `
 }
 
 export default class SourceSelection extends HTMLElement {
@@ -21,7 +35,8 @@ export default class SourceSelection extends HTMLElement {
 
     this.shadow = this.attachShadow({mode: 'closed'});
 
-    let styleElement = this.createStyle();
+    createStyle(getStyle(), this.shadow);
+    createStyle(getInputStyle(), this.shadow);
 
     this.selectionContainer = createElement('div', {class: 'selection-container'}, this.shadow);
 
@@ -40,19 +55,6 @@ export default class SourceSelection extends HTMLElement {
 
     this.fileInput = createElement('input', {type: 'file', id: 'file-input'}, this.fileContainer);
     this.fileInput.addEventListener('input', () => this.onFileChanged());
-
-    this.shadow.appendChild(styleElement);
-  }
-
-  createStyle() {
-
-    let style = document.createElement('style');
-    style.textContent = `
-      .file-container {
-        display: none;
-      }
-    `
-    return style;
   }
 
   onSelectionChanged(value) {

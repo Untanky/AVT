@@ -1,6 +1,15 @@
 import AudioElement from '../audioElement.js'
 import { audioCtx } from '../globals/audioContext.js';
-import { createElement } from '../globals/shadowTreeHelper.js';
+import { createElement, createStyle } from '../globals/shadowTreeHelper.js';
+import { getInputStyle } from '../globals/inputStyles.js';
+
+function getStyle() {
+  return `
+    .audio-player-container {
+      padding: 0.5em 1em;
+    }
+  `;
+}
 
 export default class AudioPlayerElement extends AudioElement {
 
@@ -17,7 +26,8 @@ export default class AudioPlayerElement extends AudioElement {
 
     this.shadow = this.attachShadow({mode: 'open'});
 
-    let styleElement = this.createStyle();
+    createStyle(getStyle(), this.shadow);
+    createStyle(getInputStyle(), this.shadow);
 
     const container = createElement('div', {class: 'audio-player-container'}, this.shadow);
 

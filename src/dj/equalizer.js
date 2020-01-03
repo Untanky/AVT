@@ -1,10 +1,42 @@
 import AudioElement from "../audioElement.js";
 import { audioCtx } from "../globals/audioContext.js";
-import { createElement } from '../globals/shadowTreeHelper.js';
+import { createElement, createStyle } from '../globals/shadowTreeHelper.js';
+import { getInputStyle } from "../globals/inputStyles.js";
 
 const equalizerBandThresholds = [
   100, 250, 800, 5000, 8000, 12000
 ]
+
+function getStyle() {
+  return `    
+    .container {
+      box-sizing: border-box;
+      max-width: 620px;
+      display: grid;
+      grid-template-columns: repeat(` + (equalizerBandThresholds.length + 1) + `, minmax(` + (580 / (equalizerBandThresholds.length + 1)) + `px, 1fr));
+      grid-template-rows: 5fr 1fr;
+      margin: 0 auto;
+      border: 1px solid rgb(225, 225, 225);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .container > label {
+      text-align: center;
+      grid-row: 2 / span 1;
+    }
+
+    .container input[type="range"] {
+      width: 200px;
+      background: transparent;
+      grid-row: 1 / span 1;
+      transform-origin: top center;
+      transform: rotate(90deg) translate(100px, 50px);
+      /*-webkit-appearance: slider-vertical;*/
+    }
+  `
+} 
 
 export default class EqualizerElement extends AudioElement {
 
@@ -16,19 +48,20 @@ export default class EqualizerElement extends AudioElement {
 
     this.equalizer = new Equalizer();
 
-    let style = this.createStyle();
+    createStyle(getStyle(), this.shadow);
+    createStyle(getInputStyle(), this.shadow);
 
     let container = createElement('div', {class: 'container'}, this.shadow)
 
     for(let i = 0; i <= equalizerBandThresholds.length; i++) {
-      let labelText = this.generateHertzLabelContent(i) +  " Hz:"
+      let labelText = this.generateHertzLabelContent(i) +  " Hz"
       createElement('label', {for: 'slider-' + i}, container, labelText);
 
-      let slider = createElement('input', { type: 'range', min: -40, max: 40, step: 0.8, value: 0, id: 'slider-' + i}, container);
+      let rangeContainer = createElement('div', {}, container);
+
+      let slider = createElement('input', { type: 'range', class: 'vertical-range', min: -40, max: 40, step: 0.8, value: 0, id: 'slider-' + i}, rangeContainer);
       slider.addEventListener('input', () => this.onSliderChanged(i, slider.value))
     }
-
-    this.shadow.appendChild(style);
   }
 
   generateHertzLabelContent(i) {
@@ -38,17 +71,6 @@ export default class EqualizerElement extends AudioElement {
       return equalizerBandThresholds[i - 1]
     else 
       return equalizerBandThresholds[i - 1] + " - " + equalizerBandThresholds[i];
-  }
-
-  createStyle() {
-
-    let style = document.createElement('style');
-    style.textContent = `
-      input[type="range"] {
-        display: block;
-      }
-    `;
-    return style;
   }
 
   onSliderChanged(sliderId, value) {
