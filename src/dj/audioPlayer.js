@@ -1,5 +1,6 @@
 import AudioElement from '../audioElement.js'
 import { audioCtx } from '../globals/audioContext.js';
+import { createElement } from '../globals/shadowTreeHelper.js';
 
 export default class AudioPlayerElement extends AudioElement {
 
@@ -18,34 +19,16 @@ export default class AudioPlayerElement extends AudioElement {
 
     let styleElement = this.createStyle();
 
-    let container = document.createElement('div');
-    container.setAttribute('class', 'audio-player-container');
+    const container = createElement('div', {class: 'audio-player-container'}, '', this.shadow);
 
-    this.playButton = document.createElement('button');
-    this.playButton.setAttribute('class', 'play-button');
+    this.playButton = createElement('button', {class: 'play-button'}, "Play", container);
     this.playButton.addEventListener('click', () => this.onPlayButtonClicked())
-    this.playButton.textContent = "Play";
-    
-    container.appendChild(this.playButton);
 
-    this.stopButton = document.createElement('button');
-    this.stopButton.setAttribute('class', 'stop-button');
+    this.stopButton = createElement('button', {class: 'stop-button'}, "Stop", container);
     this.stopButton.addEventListener('click', () => this.onStopClicked())
-    this.stopButton.textContent = "Stop";
-    
-    container.appendChild(this.stopButton);
 
-    this.volumeSlider = document.createElement('input');
-    this.volumeSlider.setAttribute('type', 'range');
-    this.volumeSlider.setAttribute('min', 0);
-    this.volumeSlider.setAttribute('max', 1);
-    this.volumeSlider.setAttribute('step', 0.01);
-    this.volumeSlider.setAttribute('value', 0.5);
+    this.volumeSlider = createElement('input', {type: 'range', min: 0, max: 1, step: 0.01, value: 0.5}, '', container)
     this.volumeSlider.addEventListener('input', () => this.onVolumeChanged(this.volumeSlider.value))
-
-    container.appendChild(this.volumeSlider);
-
-    this.shadow.appendChild(container);
   }
 
   createStyle() {

@@ -1,6 +1,7 @@
 import {audioCtx} from '../globals/audioContext.js'
 import looper from '../globals/looper.js'
 import AudioElement from '../audioElement.js';
+import { createElement } from '../globals/shadowTreeHelper.js';
 
 const MAXFREQ = 22050
 
@@ -16,44 +17,24 @@ export default class VisualizerElement extends AudioElement {
 
     let style = this.createStyle();
 
-    let container = document.createElement('div');
-    container.setAttribute('class', 'visualizer-container');
+    const container = createElement('div', {class: 'visualizer-container'}, '', this.shadow);
 
-    let canvasContainer = document.createElement('div');
-    container.setAttribute('class', 'canvas-container');
+    const canvasContainer = createElement('div', {class: 'canvas-container'}, '', container);
 
-    container.appendChild(canvasContainer);
+    const typeSelectorContainer = createElement('div', {class: 'type-selector-container'}, '', container);
 
-    let typeSelectorContainer = document.createElement('div');
-    container.setAttribute('class', 'type-selector-container');
+    this.canvas = createElement('canvas', {class: 'visualization-canvas'}, '', canvasContainer);
 
-    container.appendChild(typeSelectorContainer);
+    this.typeSelectorLabel = createElement('label', {for: 'type-selector'}, 'Select visualization: ', typeSelectorContainer);
 
-    this.canvas = document.createElement('canvas');
-    this.canvas.setAttribute('class', 'visualization-canvas')
-
-    canvasContainer.appendChild(this.canvas);
-
-    this.typeSelectorLabel = document.createElement('label');
-    this.typeSelectorLabel.setAttribute('for', 'type-selector');
-    this.typeSelectorLabel.textContent = "Select visualization: ";
-
-    typeSelectorContainer.appendChild(this.typeSelectorLabel);
-
-    this.typeSelector = document.createElement('select');
-    this.typeSelector.setAttribute('id', 'type-selector');
+    this.typeSelector = createElement('select', {id: 'type-selector'}, '', typeSelectorContainer)
     this.typeSelector.addEventListener('change', () => this.onTypeSelectorChange(this.typeSelector.value))
 
-    typeSelectorContainer.appendChild(this.typeSelector);
-
     for(let visualisation of visualisations) {
-        let option = document.createElement('option');
-        option.textContent = visualisation;
-        this.typeSelector.appendChild(option);
+      createElement('option', {}, visualisation, this.typeSelector);
     }
 
     this.shadow.appendChild(style);
-    this.shadow.appendChild(container)
 
     this.visualizer = new Visualizer(this.canvas);
   }

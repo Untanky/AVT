@@ -1,8 +1,9 @@
 import AudioElement from "../audioElement.js";
 import { audioCtx } from "../globals/audioContext.js";
+import { createElement } from '../globals/shadowTreeHelper.js';
 
 const equalizerBandThresholds = [
-  320, 3200
+  100, 250, 800, 5000, 8000, 12000
 ]
 
 export default class EqualizerElement extends AudioElement {
@@ -17,22 +18,16 @@ export default class EqualizerElement extends AudioElement {
 
     let style = this.createStyle();
 
-    let container = document.createElement('div');
-    container.setAttribute('class', 'container');
+    let container = createElement('div', {class: 'container'}, '', this.shadow)
 
     for(let i = 0; i <= equalizerBandThresholds.length; i++) {
-      let slider = document.createElement('input');
-      slider.setAttribute('type', 'range');
-      slider.setAttribute('min', -40);
-      slider.setAttribute('max', 40);
-      slider.setAttribute('step', 0.8);
-      slider.setAttribute('value', 0);
+      createElement('label', {for: 'slider-' + i}, equalizerBandThresholds[i] + "Hz:", container);
+
+      let slider = createElement('input', { type: 'range', min: -40, max: 40, step: 0.8, value: 0, id: 'slider-' + i}, '', container);
       slider.addEventListener('input', () => this.onSliderChanged(i, slider.value))
-      container.appendChild(slider);
     }
 
     this.shadow.appendChild(style);
-    this.shadow.appendChild(container);
   }
 
   createStyle() {
