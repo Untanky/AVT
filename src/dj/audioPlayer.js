@@ -1,4 +1,4 @@
-import AudioElement from '../audioElement.js'
+import AudioElement from '../audioElement.js';
 import { audioCtx } from '../globals/audioContext.js';
 import { createElement, createStyle } from '../globals/shadowTreeHelper.js';
 import { getInputStyle } from '../globals/inputStyles.js';
@@ -35,10 +35,10 @@ export default class AudioPlayerElement extends AudioElement {
     this.playButton.addEventListener('click', () => this.onPlayButtonClicked())
 
     this.stopButton = createElement('button', {class: 'stop-button'}, container, "Stop");
-    this.stopButton.addEventListener('click', () => this.onStopClicked())
+    this.stopButton.addEventListener('click', () => this.onStopClicked());
 
-    this.volumeSlider = createElement('input', {type: 'range', min: 0, max: 1, step: 0.01, value: 0.5}, container)
-    this.volumeSlider.addEventListener('input', () => this.onVolumeChanged(this.volumeSlider.value))
+    this.volumeSlider = createElement('input', {type: 'range', min: 0, max: 1, step: 0.01, value: 0.5}, container);
+    this.volumeSlider.addEventListener('input', () => this.onVolumeChanged(this.volumeSlider.value));
   }
 
   createStyle() {
@@ -75,6 +75,7 @@ export default class AudioPlayerElement extends AudioElement {
 
   onVolumeChanged(value) {
     this.audioPlayer.setVolume(value);
+    this.volumeSlider.value = value;
   }
 
   getFirstNode() {
