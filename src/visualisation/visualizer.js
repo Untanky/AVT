@@ -44,8 +44,6 @@ export default class VisualizerElement extends AudioElement {
     createStyle(getStyle(), this.shadow);
     createStyle(getInputStyle(), this.shadow);
 
-    let script = createElement('script', {src: './src/p5.js'}, this.shadow);
-
     const container = createElement('div', {class: 'visualizer-container'}, this.shadow);
 
     const canvasContainer = createElement('div', {class: 'canvas-container'}, container);
