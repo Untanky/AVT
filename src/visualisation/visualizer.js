@@ -139,6 +139,11 @@ class Visualizer {
         this.visualizers = {bars: this.barVisualizer}
         this.type = "bars"
         looper.addLoopedMethod(this.draw, this);
+
+        this.stage = new PIXI.Container(0x333333);
+        this.renderer = new PIXI.CanvasRenderer(this.width, this.height, {view: canvas, autoResize: true});
+        this.graphics = new PIXI.Graphics();
+        this.stage.addChild(this.graphics);
     }
 
     setVisualizer(type) {
@@ -147,8 +152,10 @@ class Visualizer {
 
     barVisualizer(context) {
 
+      context.graphics.clear();
+
       var barWidth = ((context.width - 20) / (BAR_VIS_BUCKET_COUNT)) * 2;
-      var barHeight;
+      var barHeight = 10;
 
       let buckets = []
 
@@ -159,16 +166,25 @@ class Visualizer {
           buckets[bucketIndex] = 0;
         buckets[bucketIndex] = Math.max(buckets[bucketIndex], element);
       }
-
+       
       var x = 10; 
+
+      context.graphics.beginFill(0xEB7979);
+      context.graphics.drawRect(x, 150, barWidth, barHeight);
       for (var i = 0; i < BAR_VIS_BUCKET_COUNT / 2; i++) {
           barHeight = buckets[i] / 2;
-          context.canvasCtx.fillStyle = 'hsl(0, 75%, 70%)';
-          context.canvasCtx.fillRect(x, context.height - barHeight, barWidth, barHeight);
+          context.graphics.beginFill(0xEB7979);
+          context.graphics.drawRect(x, 150, barWidth, -barHeight);
+          //context.canvasCtx.fillStyle = 'hsl(0, 75%, 70%)';
+          //context.canvasCtx.fillRect(x, context.height - barHeight, barWidth, barHeight);
 
           x += barWidth + 1;
       }
+      
+
+      context.renderer.render(context.stage);
     }
+    
 
     /**
      * Draws the visualization
