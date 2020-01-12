@@ -1,6 +1,7 @@
 export const getInputStyle = () => {
   return `
     input[type="button"],
+    input[type="file"]::-webkit-file-upload-button,
     select,
     button {
       cursor: pointer;
@@ -9,6 +10,10 @@ export const getInputStyle = () => {
       border: 1px solid rgb(105, 105, 105);
       border-radius: 24px;
       padding: 0.5em 1em;
+    }
+
+    .custom-file-input:: {
+      visibility: hidden;
     }
 
     /**

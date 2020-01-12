@@ -3,11 +3,11 @@ import { createElement, createStyle } from '../globals/shadowTreeHelper.js';
 import { getInputStyle } from '../globals/inputStyles.js';
 
 const sources = {
+  file: 'File',
   sine: 'sine',
   triangle: 'triangle',
   sawtooth: 'sawtooth',
   square: 'square',
-  file: 'File'
 }
 
 function getStyle() {
@@ -17,7 +17,6 @@ function getStyle() {
     }
 
     .file-container {
-      display: none;
       padding: 0.5em 1em;
     }
   `

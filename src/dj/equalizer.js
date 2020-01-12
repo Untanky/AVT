@@ -13,6 +13,7 @@ function getStyle() {
       box-sizing: border-box;
       max-width: 620px;
       display: grid;
+      background-color: rgb(30, 30, 30);
       grid-template-columns: repeat(` + (equalizerBandThresholds.length + 1) + `, minmax(` + (580 / (equalizerBandThresholds.length + 1)) + `px, 1fr));
       grid-template-rows: 5fr 1fr;
       margin: 0 auto;

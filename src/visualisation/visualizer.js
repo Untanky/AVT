@@ -26,7 +26,7 @@ function getStyle() {
 
     .visualizer-container > .canvas-container > .visualization-canvas {
       width: 100%;
-      border: 1px solid rgb(225, 225, 225);
+      border: 1px solid rgb(105, 105, 105);
       border-radius: 24px;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
     }
@@ -129,8 +129,8 @@ class Visualizer {
      */
     constructor(canvas) {
         this.canvas = canvas
-        this.width = this.canvas.width
-        this.height = this.canvas.height
+        this.width = 620;
+        this.height = 300;
         this.canvasCtx = this.canvas.getContext('2d')
         this.analyser = audioCtx.createAnalyser();
         this.analyser.fftSize = FFT_SIZE;
@@ -167,16 +167,12 @@ class Visualizer {
         buckets[bucketIndex] = Math.max(buckets[bucketIndex], element);
       }
        
-      var x = 10; 
+      var x = 24; 
 
-      context.graphics.beginFill(0xEB7979);
-      context.graphics.drawRect(x, 150, barWidth, barHeight);
       for (var i = 0; i < BAR_VIS_BUCKET_COUNT / 2; i++) {
-          barHeight = buckets[i] / 2;
-          context.graphics.beginFill(0xEB7979);
-          context.graphics.drawRect(x, 150, barWidth, -barHeight);
-          //context.canvasCtx.fillStyle = 'hsl(0, 75%, 70%)';
-          //context.canvasCtx.fillRect(x, context.height - barHeight, barWidth, barHeight);
+          barHeight = buckets[i];
+          context.graphics.beginFill(0xffa41c);
+          context.graphics.drawRect(x, context.height, barWidth, -barHeight);
 
           x += barWidth + 1;
       }
@@ -189,7 +185,7 @@ class Visualizer {
       
       context.analyser.getByteTimeDomainData(context.dataArray);
 
-      context.graphics.lineStyle(2, 0xEB7979);
+      context.graphics.lineStyle(2, 0xffa41c);
       context.graphics.position.set(0, -context.width/4);
       
       var sliceWidth = context.width * 1.0 / context.bufferLength;
@@ -215,10 +211,12 @@ class Visualizer {
      */
     draw(context) {
 
-        context.canvasCtx.fillStyle = 'rgb(245, 245, 245)';
-        context.canvasCtx.fillRect(0, 0, context.width, context.height);
+        context.analyser.getByteFrequencyData(context.dataArray);
 
         context.graphics.clear();
+
+        context.graphics.beginFill(0x1E1E1E);
+        context.graphics.drawRect(0, 0, context.width, context.height);
 
         context.visualizers[context.type](context);
 

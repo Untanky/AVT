@@ -64,7 +64,8 @@ export default class App extends HTMLElement {
 
       #root-container h1 {
         text-align: center;
-        color: rgb(245, 245, 245);
+        font-size: 56px;
+        color: rgb(255, 164, 28);
       }
 
       #root-container h1 {
