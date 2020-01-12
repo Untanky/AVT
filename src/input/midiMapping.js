@@ -1,15 +1,17 @@
 class MidiMapping {
 
   constructor(){
-    this.map = []
+    this.map = new Map();
   }
 
   put(btnId, callback) {
-    this.map[btnId] = callback
+    this.map.set(btnId,callback);
+    //this.map[btnId] = callback
   }
 
   containsKey(btnId) {
-    return this.map[btnId] !== undefined && this.map[btnId] !== null;
+    return this.map.has(btnId);
+    //return this.map[btnId] !== undefined && this.map[btnId] !== null;
   }
 
   delete(btnId) {
@@ -17,7 +19,7 @@ class MidiMapping {
   }
  
   get(btnId) {
-    this.map[btnId]
+    return this.map.get(btnId);
   }
 }
 

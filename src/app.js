@@ -1,4 +1,7 @@
-import AudioTrack from './dj/audioTrack.js'
+import AudioTrack from './dj/audioTrack.js';
+import InputManager from './input/midiInputManager.js';
+import MidiMapping from './input/midiMapping.js';
+import ControllerBinding from './input/midiControllerFunctions.js';
 import { audioCtx } from './globals/audioContext.js';
 import { createElement, createStyle } from './globals/shadowTreeHelper.js';
 import { getInputStyle } from './globals/inputStyles.js';
@@ -32,6 +35,10 @@ export default class App extends HTMLElement {
 
     this.track2 = new AudioTrack();
     trackContainer.appendChild(this.track2);
+
+    this.midiMapping = new MidiMapping();
+    this.inputManager = new InputManager(this.midiMapping);
+    this.controllerBinding = new ControllerBinding(this.inputManager,this,this.track1,this.track2);
 
     this.shadow.appendChild(styleElement);
     this.shadow.appendChild(rootContainer);
@@ -84,6 +91,7 @@ export default class App extends HTMLElement {
   onCrossfaderChanged(value) {
     this.gain1.gain.value = Math.cos(value * 0.5*Math.PI);
     this.gain2.gain.value = Math.cos((1.0 - value) * 0.5*Math.PI);
+    this.crossfader.value = value;
   }
 }
 
