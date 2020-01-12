@@ -30,10 +30,10 @@ export default class App extends HTMLElement {
 
     const trackContainer = createElement('div', {class: 'track-container'}, rootContainer);
 
-    this.track1 = new AudioTrack();
+    this.track1 = new AudioTrack(1);
     trackContainer.appendChild(this.track1);
 
-    this.track2 = new AudioTrack();
+    this.track2 = new AudioTrack(2);
     trackContainer.appendChild(this.track2);
 
     this.midiMapping = new MidiMapping();
@@ -64,6 +64,7 @@ export default class App extends HTMLElement {
 
       #root-container h1 {
         text-align: center;
+        color: rgb(245, 245, 245);
       }
 
       #root-container h1 {

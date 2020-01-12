@@ -8,7 +8,7 @@ import AudioElement from '../audioElement.js';
 
 export default class AudioTrack extends AudioElement {
 
-  constructor() {
+  constructor(id) {
     super();
 
     this.shadow = this.attachShadow({mode: 'open'});
@@ -17,7 +17,7 @@ export default class AudioTrack extends AudioElement {
     let styleElement = this.createStyle();
     
     // create and setup container with title 
-    let audioTrackContainer = this.createContainerWithTitle();
+    let audioTrackContainer = this.createContainerWithTitle(id);
     
     // create custom visualizer element
     this.visualizerElement = new VisualizerElement();
@@ -54,23 +54,28 @@ export default class AudioTrack extends AudioElement {
     styleElement.textContent = `
       .audio-track-container {
         max-width: 620px;
-        background-color: white;
+        background-color: rgba(35, 35, 35);
+        color: rgb(255, 164, 28);
         margin: 2em auto;
         border-radius: 24px;
         padding: 2em;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       }
+
+      .audio-track-container * {
+        color: rgb(245, 245, 245);
+      }
     `;
     return styleElement;
   }
 
-  createContainerWithTitle() {
+  createContainerWithTitle (id) {
     let container = document.createElement('div');
     container.setAttribute('class', 'audio-track-container');
 
     let trackTitle = document.createElement('h1');
     trackTitle.setAttribute('class', 'track-title');
-    trackTitle.textContent = "Track " + this.getAttribute('number');
+    trackTitle.textContent = "Track " + id;
 
     container.appendChild(trackTitle);
 

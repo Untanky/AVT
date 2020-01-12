@@ -4,8 +4,9 @@ export const getInputStyle = () => {
     select,
     button {
       cursor: pointer;
-      background-color: inherit;
-      border: 1px solid rgb(175, 175, 175);
+      background-color: rgba(55, 55, 55);
+      color: rgba(225, 225, 225);
+      border: 1px solid rgb(105, 105, 105);
       border-radius: 24px;
       padding: 0.5em 1em;
     }
@@ -18,6 +19,7 @@ export const getInputStyle = () => {
     input[type=range] {
       -webkit-appearance: none;
       margin: 0px 0;
+      background-color: transparent;
     }
 
     input[type=range]:focus {
@@ -29,18 +31,18 @@ export const getInputStyle = () => {
       height: 16px;
       cursor: pointer;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-      background: #ffffff;
+      background-color: rgba(55, 55, 55);
       border-radius: 25px;
       border: 0px solid #000000;
     }
 
     input[type=range]::-webkit-slider-thumb {
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-      border: 1px solid #afafaf;
+      border: 1px solid rgb(45, 45, 45);
       height: 16px;
       width: 32px;
       border-radius: 50px;
-      background: #ffffff;
+      background: rgb(255, 164, 28);
       cursor: pointer;
       -webkit-appearance: none;
       margin-top: 0px;

@@ -8,6 +8,11 @@ function getStyle() {
     .audio-player-container {
       padding: 0.5em 1em;
     }
+
+    .play-button {
+      background-color: rgb(255, 164, 28);
+      color: rgb(0, 0, 0);
+    }
   `;
 }
 

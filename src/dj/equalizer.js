@@ -16,7 +16,7 @@ function getStyle() {
       grid-template-columns: repeat(` + (equalizerBandThresholds.length + 1) + `, minmax(` + (580 / (equalizerBandThresholds.length + 1)) + `px, 1fr));
       grid-template-rows: 5fr 1fr;
       margin: 0 auto;
-      border: 1px solid rgb(225, 225, 225);
+      border: 1px solid rgb(105, 105, 105);
       border-radius: 24px;
       padding: 20px;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);

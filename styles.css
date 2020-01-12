@@ -4,7 +4,8 @@
 }
 
 body {
-    background: rgb(245, 245, 245);
+    background: rgb(24, 24, 24);
+    color: rgb(245, 245, 245);
 }
 
 #root {
