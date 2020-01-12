@@ -15,9 +15,8 @@ export default class ControllerBinding {
   }
 
   crossfader(app) {
-    this.manager.midiMapping.put(64, (value) => {
+    this.manager.midiMapping.put(6411, (value) => {
       app.onCrossfaderChanged(this.basicValue127 * value);
-
     });
   }
 
@@ -25,58 +24,59 @@ export default class ControllerBinding {
 
   }
 
+  // put: this.manager.midiMapping.put(buttonId + cmd , (value) => ...)
   track1Binding(track1) {
 
     //Play & Pause
-    this.manager.midiMapping.put(19, (value) => {
+    this.manager.midiMapping.put(199, (value) => {
       if (value == 127) {
         track1.audioPlayer.onPlayButtonClicked();
       }
     });
 
     //Stop
-    this.manager.midiMapping.put(20, (value) => {
+    this.manager.midiMapping.put(209, (value) => {
       if (value == 127) {
         track1.audioPlayer.onStopClicked();
       }
     });
     //Volume
-    this.manager.midiMapping.put(48,(value) => {
+    this.manager.midiMapping.put(4811,(value) => {
       track1.audioPlayer.onVolumeChanged(this.basicValue127 * value);
     })
 
     //up to 100hz
-    this.manager.midiMapping.put(6,(value) => {
+    this.manager.midiMapping.put(611,(value) => {
       track1.equalizer.onSliderChanged(0, this.midiToEquilizerValue(value));
     })
 
     //100hz - 250hz
-    this.manager.midiMapping.put(10,(value) => {
+    this.manager.midiMapping.put(1011,(value) => {
       track1.equalizer.onSliderChanged(1, this.midiToEquilizerValue(value));
     })
 
     //250hz - 800hz
-    this.manager.midiMapping.put(14,(value) => {
+    this.manager.midiMapping.put(1411,(value) => {
       track1.equalizer.onSliderChanged(2, this.midiToEquilizerValue(value));
     })
 
     //800hz - 5000hz
-    this.manager.midiMapping.put(18,(value) => {
+    this.manager.midiMapping.put(1811,(value) => {
       track1.equalizer.onSliderChanged(3, this.midiToEquilizerValue(value));
     })
     
     //5000hz - 8000hz
-    this.manager.midiMapping.put(7,(value) => {
+    this.manager.midiMapping.put(711,(value) => {
       track1.equalizer.onSliderChanged(4, this.midiToEquilizerValue(value));
     })
     
     //8000hz - 12000hz
-    this.manager.midiMapping.put(11,(value) => {
+    this.manager.midiMapping.put(1111,(value) => {
       track1.equalizer.onSliderChanged(5, this.midiToEquilizerValue(value));
     })
 
     //more than 12000hz
-    this.manager.midiMapping.put(15,(value) => {
+    this.manager.midiMapping.put(1511,(value) => {
       track1.equalizer.onSliderChanged(6, this.midiToEquilizerValue(value));
     })
   }
@@ -84,56 +84,56 @@ export default class ControllerBinding {
   track2Binding(track2) {
 
     //Play & Pause
-    this.manager.midiMapping.put(31, (value) => {
+    this.manager.midiMapping.put(319, (value) => {
       if (value == 127) {
         track2.audioPlayer.onPlayButtonClicked();
       }
     });
 
     //Stop
-    this.manager.midiMapping.put(32, (value) => {
+    this.manager.midiMapping.put(329, (value) => {
       if (value == 127) {
         track2.audioPlayer.onStopClicked();
       }
     });
 
     //Volume
-    this.manager.midiMapping.put(51,(value) => {
+    this.manager.midiMapping.put(5111,(value) => {
       track2.audioPlayer.onVolumeChanged(this.basicValue127 * value);
     })
 
     //up to 100hz
-    this.manager.midiMapping.put(8,(value) => {
+    this.manager.midiMapping.put(811,(value) => {
       track2.equalizer.onSliderChanged(0, this.midiToEquilizerValue(value));
     })
 
     //100hz - 250hz
-    this.manager.midiMapping.put(12,(value) => {
+    this.manager.midiMapping.put(1211,(value) => {
       track2.equalizer.onSliderChanged(1, this.midiToEquilizerValue(value));
     })
 
     //250hz - 800hz
-    this.manager.midiMapping.put(16,(value) => {
+    this.manager.midiMapping.put(1611,(value) => {
       track2.equalizer.onSliderChanged(2, this.midiToEquilizerValue(value));
     })
 
     //800hz - 5000hz
-    this.manager.midiMapping.put(20,(value) => {
-      track2.equalizer.onSliderChanged(3, this.midiToEquilizerValue(value));
+    this.manager.midiMapping.put(2011,(value) => {
+        track2.equalizer.onSliderChanged(3, this.midiToEquilizerValue(value));
     })
     
     //5000hz - 8000hz
-    this.manager.midiMapping.put(9,(value) => {
+    this.manager.midiMapping.put(911,(value) => {
       track2.equalizer.onSliderChanged(4, this.midiToEquilizerValue(value));
     })
     
     //8000hz - 12000hz
-    this.manager.midiMapping.put(13,(value) => {
+    this.manager.midiMapping.put(1311,(value) => {
       track2.equalizer.onSliderChanged(5, this.midiToEquilizerValue(value));
     })
 
     //more than 12000hz
-    this.manager.midiMapping.put(17,(value) => {
+    this.manager.midiMapping.put(1711,(value) => {
       track2.equalizer.onSliderChanged(6, this.midiToEquilizerValue(value));
     })
   }
