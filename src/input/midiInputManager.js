@@ -21,9 +21,12 @@ export default class InputManager {
 
       console.log(`cmd: ${cmd}, channel: ${channel}, btnID: ${btnID}, value: ${value}`);
 
-        if (this.midiMapping.containsKey(btnID)) {
-          const callbackFn = this.midiMapping.get(btnID);
-          callbackFn(value);
+      //combine btnId + cmd to get unique key
+      var key = parseInt(btnID+""+cmd);
+
+        if (this.midiMapping.containsKey(key)) {
+          const callbackFn = this.midiMapping.get(key);
+          callbackFn(value, cmd);
         }
   }
 }
