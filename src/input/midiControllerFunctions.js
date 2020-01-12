@@ -10,8 +10,8 @@ export default class ControllerBinding {
 
     this.specialBindings(this.track1, this.track2);
     this.crossfader(this.app);
-    this.trackBinding(this.track1);
-    this.trackBinding(this.track2);
+    this.track1Binding(this.track1);
+    this.track2Binding(this.track2);
   }
 
   crossfader(app) {
@@ -23,62 +23,6 @@ export default class ControllerBinding {
 
   specialBindings(track1, track2) {
 
-  }
-
-  trackBinding(track) {
-
-    //Play & Pause
-    this.manager.midiMapping.put(19, (value) => {
-      if (value == 127) {
-        track.audioPlayer.onPlayButtonClicked();
-      }
-    });
-
-    //Stop
-    this.manager.midiMapping.put(20, (value) => {
-      if (value == 127) {
-        track.audioPlayer.onStopClicked();
-      }
-    });
-    //Volume
-    this.manager.midiMapping.put(48,(value) => {
-      track.audioPlayer.onVolumeChanged(this.basicValue127 * value);
-    })
-
-    //up to 100hz
-    this.manager.midiMapping.put(6,(value) => {
-      track.equalizer.onSliderChanged(0, this.midiToEquilizerValue(value));
-    })
-
-    //100hz - 250hz
-    this.manager.midiMapping.put(10,(value) => {
-      track.equalizer.onSliderChanged(1, this.midiToEquilizerValue(value));
-    })
-
-    //250hz - 800hz
-    this.manager.midiMapping.put(14,(value) => {
-      track.equalizer.onSliderChanged(2, this.midiToEquilizerValue(value));
-    })
-
-    //800hz - 5000hz
-    this.manager.midiMapping.put(18,(value) => {
-      track.equalizer.onSliderChanged(3, this.midiToEquilizerValue(value));
-    })
-    
-    //5000hz - 8000hz
-    this.manager.midiMapping.put(7,(value) => {
-      track.equalizer.onSliderChanged(4, this.midiToEquilizerValue(value));
-    })
-    
-    //8000hz - 12000hz
-    this.manager.midiMapping.put(11,(value) => {
-      track.equalizer.onSliderChanged(5, this.midiToEquilizerValue(value));
-    })
-
-    //more than 12000hz
-    this.manager.midiMapping.put(15,(value) => {
-      track.equalizer.onSliderChanged(6, this.midiToEquilizerValue(value));
-    })
   }
 
   track1Binding(track1) {
