@@ -32,8 +32,7 @@ function getStyle() {
       background: transparent;
       grid-row: 1 / span 1;
       transform-origin: top center;
-      transform: rotate(90deg) translate(100px, 50px);
-      /*-webkit-appearance: slider-vertical;*/
+      transform: rotate(-90deg) translate(-100px, -60px);
     }
   `
 } 

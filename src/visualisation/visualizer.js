@@ -5,6 +5,8 @@ import { createElement, createStyle } from '../globals/shadowTreeHelper.js';
 import { getInputStyle } from '../globals/inputStyles.js';
 
 const MAXFREQ = 22050
+const FFT_SIZE = 2048;
+const BAR_VIS_BUCKET_COUNT = 50;
 
 const visualisations = [ 'bar', 'line' ];
 
@@ -131,11 +133,17 @@ class Visualizer {
         this.height = this.canvas.height
         this.canvasCtx = this.canvas.getContext('2d')
         this.analyser = audioCtx.createAnalyser();
+        this.analyser.fftSize = FFT_SIZE;
         this.bufferLength = this.analyser.frequencyBinCount
         this.dataArray = new Uint8Array(this.bufferLength)
         this.visualizers = {bars: this.barVisualizer}
         this.type = "bars"
         looper.addLoopedMethod(this.draw, this);
+
+        this.stage = new PIXI.Container(0x333333);
+        this.renderer = new PIXI.CanvasRenderer(this.width, this.height, {view: canvas, autoResize: true});
+        this.graphics = new PIXI.Graphics();
+        this.stage.addChild(this.graphics);
     }
 
     setVisualizer(type) {
@@ -144,23 +152,39 @@ class Visualizer {
 
     barVisualizer(context) {
 
-        var barWidth = (context.width / context.dataArray.length);
-        var barHeight;
+      context.graphics.clear();
 
-        var x = 0; 
-        for (var i = 0; i < context.dataArray.length; i++) {
-            barHeight = context.dataArray[i];
-            if(i === 0)
-                context.canvasCtx.fillStyle = 'rgb(255,0,0)';
-            if(i === 1)
-                context.canvasCtx.fillStyle = 'rgb(0,255,0)';
-            if(i === 2)
-                context.canvasCtx.fillStyle = 'rgb(0,0,255)';
-            context.canvasCtx.fillRect(x, context.height - barHeight, barWidth, barHeight);
+      var barWidth = ((context.width - 20) / (BAR_VIS_BUCKET_COUNT)) * 2;
+      var barHeight = 10;
 
-            x += barWidth + 1;
-        }
+      let buckets = []
+
+      for (let i = 0; i < context.dataArray.length; i++) {
+        const element = context.dataArray[i];
+        const bucketIndex = Math.floor(i/context.dataArray.length * BAR_VIS_BUCKET_COUNT);
+        if(buckets[bucketIndex] === undefined || buckets[bucketIndex] === NaN)
+          buckets[bucketIndex] = 0;
+        buckets[bucketIndex] = Math.max(buckets[bucketIndex], element);
+      }
+       
+      var x = 10; 
+
+      context.graphics.beginFill(0xEB7979);
+      context.graphics.drawRect(x, 150, barWidth, barHeight);
+      for (var i = 0; i < BAR_VIS_BUCKET_COUNT / 2; i++) {
+          barHeight = buckets[i] / 2;
+          context.graphics.beginFill(0xEB7979);
+          context.graphics.drawRect(x, 150, barWidth, -barHeight);
+          //context.canvasCtx.fillStyle = 'hsl(0, 75%, 70%)';
+          //context.canvasCtx.fillRect(x, context.height - barHeight, barWidth, barHeight);
+
+          x += barWidth + 1;
+      }
+      
+
+      context.renderer.render(context.stage);
     }
+    
 
     /**
      * Draws the visualization
