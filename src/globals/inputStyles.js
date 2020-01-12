@@ -48,7 +48,7 @@ export const getInputStyle = () => {
 
     input[type=range].vertical-range::-webkit-slider-runnable-track,
     input[type=range].vertical-range::-webkit-slider-thumb {
-      box-shadow: 2px 0 4px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: -2px 0 4px 0 rgba(0, 0, 0, 0.2);
     }
 
     input[type=range]:focus::-webkit-slider-runnable-track {
