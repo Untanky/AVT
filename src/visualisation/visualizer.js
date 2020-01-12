@@ -203,6 +203,7 @@ class Visualizer {
 
         x += sliceWidth;
       }
+      context.graphics.currentPath.shape.closed = false;
     }
 
     /**
