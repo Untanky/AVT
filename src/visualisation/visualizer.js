@@ -136,8 +136,8 @@ class Visualizer {
         this.analyser.fftSize = FFT_SIZE;
         this.bufferLength = this.analyser.frequencyBinCount
         this.dataArray = new Uint8Array(this.bufferLength)
-        this.visualizers = {bars: this.barVisualizer}
-        this.type = "bars"
+        this.visualizers = {bar: this.barVisualizer, line: this.lineVisualizer}
+        this.type = "bar"
         looper.addLoopedMethod(this.draw, this);
 
         this.stage = new PIXI.Container(0x333333);
@@ -152,7 +152,7 @@ class Visualizer {
 
     barVisualizer(context) {
 
-      context.graphics.clear();
+      context.analyser.getByteFrequencyData(context.dataArray);
 
       var barWidth = ((context.width - 20) / (BAR_VIS_BUCKET_COUNT)) * 2;
       var barHeight = 10;
@@ -184,19 +184,45 @@ class Visualizer {
 
       context.renderer.render(context.stage);
     }
-    
+
+    lineVisualizer(context) {
+      
+      context.analyser.getByteTimeDomainData(context.dataArray);
+
+      context.graphics.lineStyle(2, 0xEB7979);
+      context.graphics.position.set(0, -context.width/4);
+      
+      var sliceWidth = context.width * 1.0 / context.bufferLength;
+      var x = 0;
+
+      for(var i = 0; i < context.bufferLength; i++) {
+   
+        var v = context.dataArray[i] / 128.0;
+        var y = v * context.width/2;
+
+        if(i === 0) {
+          context.graphics.moveTo(x, y);
+        } else {
+          context.graphics.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+      }
+    }
 
     /**
      * Draws the visualization
      */
     draw(context) {
 
-        context.analyser.getByteFrequencyData(context.dataArray);
-
         context.canvasCtx.fillStyle = 'rgb(245, 245, 245)';
         context.canvasCtx.fillRect(0, 0, context.width, context.height);
 
+        context.graphics.clear();
+
         context.visualizers[context.type](context);
+
+        context.renderer.render(context.stage);
     };
 
     getAnalyserNode() {
