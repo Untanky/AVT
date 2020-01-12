@@ -186,7 +186,6 @@ class Visualizer {
       context.analyser.getByteTimeDomainData(context.dataArray);
 
       context.graphics.lineStyle(2, 0xffa41c);
-      context.graphics.position.set(0, -context.width/4);
       
       var sliceWidth = context.width * 1.0 / context.bufferLength;
       var x = 0;
@@ -197,9 +196,9 @@ class Visualizer {
         var y = v * context.width/2;
 
         if(i === 0) {
-          context.graphics.moveTo(x, y);
+          context.graphics.moveTo(x, y - (context.height / 2));
         } else {
-          context.graphics.lineTo(x, y);
+          context.graphics.lineTo(x, y - (context.height / 2));
         }
 
         x += sliceWidth;

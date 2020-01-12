@@ -97,7 +97,7 @@ class SourceFactory {
 
   constructor() {
 
-    this.type = 'sine';
+    this.type = 'File';
   }
 
   setType(type) {
