@@ -59,7 +59,7 @@ export const getInputStyle = () => {
     }
 
     input[type=range]:focus::-webkit-slider-runnable-track {
-      background: #ffffff;
+      background-color: rgba(55, 55, 55);
     }
   `;
 }

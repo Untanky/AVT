@@ -1,9 +1,20 @@
-# Audio and Video Technology
+# Audio und Video Technik
 
-A project by Lukas Grimm, Jennifer Borowski and Felix Schröder
+Ein Projekt von Lukas Grimm, Jennifer Borowski und Felix Schröder
 
-### Reading material
+### Features
 
-https://developer.mozilla.org/de/docs/Web/API/Web_Audio_API
+- Abspielen von Audio Sources
+  - Laden von Sound Files als Audio Source
+  - Oszillator als Audio Source
+- Individueller Equalizer für jede Audio Source
+- Individueller Visualizer für jede Audio Source
+  - Bar Visualizer
+  - Line Visualizer
+- Cross-Fader zwischen den zwei Audio Sources
 
-https://developer.mozilla.org/de/docs/Web/API/WebGL_API/Tutorial
+### Verwendete Technologien
+
+- WebAudio API
+- WebComponents
+- PIXI.js
