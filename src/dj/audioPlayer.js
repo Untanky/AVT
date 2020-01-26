@@ -87,7 +87,7 @@ export default class AudioPlayerElement extends AudioElement {
   onStopClicked() {
     
     this.audioPlayer.stop();
-    this.playButton = "Play"
+    this.playButton.textContent = "Play"
   }
 
   onVolumeChanged(value) {
